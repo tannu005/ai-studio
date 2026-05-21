@@ -150,8 +150,8 @@ class EmailService:
     def send_task_status_update(cls, user_email, user_name, task_title, task_id, status, feedback=""):
         """Notify User when Admin accepts or requests revision for a task"""
         is_accepted = status == "accepted"
-        status_text = "Accepted / Completed" if is_accepted else "Revision Requested"
-        subject = f"Task {status_text}: {task_title}"
+        status_text = "Accepted" if is_accepted else "Revision Requested"
+        subject = f"Task Accepted: {task_title}" if is_accepted else f"Task Revision Requested: {task_title}"
         task_link = f"http://localhost:3000/tasks/{task_id}"
         
         btn_color = "linear-gradient(135deg, #10b981, #059669)" if is_accepted else "linear-gradient(135deg, #f59e0b, #d97706)"
