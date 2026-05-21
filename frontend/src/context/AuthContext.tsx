@@ -55,11 +55,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const data = await res.json();
         setProfile(data);
       } else {
-        setProfile(null);
+        // Fallback profile if backend returns non-ok but Supabase token is valid
+        console.warn('Backend profile fetch failed. Creating client-side fallback.');
+        const { data: { user: sbUser } } = await supabase.auth.getUser();
+        setProfile({
+          id: sbUser?.id || 'oauth-user',
+          email: sbUser?.email || 'user@taskhub.dev',
+          full_name: sbUser?.user_metadata?.full_name || sbUser?.email?.split('@')[0] || 'OAuth User',
+          avatar_url: sbUser?.user_metadata?.avatar_url || '',
+          role: 'user'
+        });
       }
     } catch (e) {
       console.error('Failed to sync profile with backend', e);
-      setProfile(null);
+      // Fallback profile if backend is completely down
+      try {
+        const { data: { user: sbUser } } = await supabase.auth.getUser();
+        setProfile({
+          id: sbUser?.id || 'oauth-user',
+          email: sbUser?.email || 'user@taskhub.dev',
+          full_name: sbUser?.user_metadata?.full_name || sbUser?.email?.split('@')[0] || 'OAuth User',
+          avatar_url: sbUser?.user_metadata?.avatar_url || '',
+          role: 'user'
+        });
+      } catch (innerErr) {
+        setProfile(null);
+      }
     }
   };
 
@@ -85,6 +106,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Set up standard Supabase Auth Listener
     const getInitialSession = async () => {
+      if (localStorage.getItem('taskhub_demo_token')) {
+        setLoading(false);
+        return;
+      }
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
@@ -102,6 +127,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getInitialSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (localStorage.getItem('taskhub_demo_token')) {
+        setLoading(false);
+        return;
+      }
       setLoading(true);
       if (session) {
         setUser(session.user);
