@@ -149,7 +149,22 @@ taskhub/
 
 ---
 
-### 4. Database Setup (Supabase)
+### 4. 🐳 Docker Containerization (Unified Local Deployment)
+
+To run the entire full-stack application inside containerized environments with a single command, you can use the configured multi-container setup.
+
+1. Ensure Docker Desktop is installed and running on your host machine.
+2. From the project root directory, run:
+   ```bash
+   docker compose up --build
+   ```
+3. Once built and running, you can access:
+   - **Frontend App**: [http://localhost:3000](http://localhost:3000)
+   - **Backend Flask API**: [http://localhost:5000](http://localhost:5000)
+
+---
+
+### 5. Database Setup (Supabase)
 To set up Row Level Security and Audit Log triggers, execute the SQL commands found in `/migrations/01_schema.sql` directly inside your Supabase Project SQL Editor.
 
 ---
