@@ -9,7 +9,7 @@ COPY . .
 
 # Set default env values for the build process (Next.js embeds these during build time)
 ENV NEXT_PUBLIC_API_URL=http://localhost:5000
-ENV NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+ENV NEXT_PUBLIC_SUPABASE_URL=https://bqbafpkrwzkdrwvkbvsy.supabase.co
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 RUN npm run build

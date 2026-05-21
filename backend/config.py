@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://your-project.supabase.co")
+    SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://bqbafpkrwzkdrwvkbvsy.supabase.co")
     SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY", "your-anon-key")
     SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "your-service-role-key")
     
