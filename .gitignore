@@ -1,0 +1,45 @@
+# Core gitignore for TaskHub Full-Stack App
+
+# Local environment files (Secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python / Backend (Recursive check)
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+backend/venv/
+backend/.venv/
+backend/.pytest_cache/
+backend/instance/
+backend/.webassets-cache
+backend/.ipynb_checkpoints/
+backend/static/generations/generated_*
+backend/static/temp/
+
+# Node / Frontend
+**/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
+frontend/tsconfig.tsbuildinfo
+
+# Scratch or temporary developer directories
+scratch/
+test.txt
