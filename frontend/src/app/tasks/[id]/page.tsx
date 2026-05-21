@@ -7,6 +7,7 @@ import {
   ArrowLeft, Camera, Sparkles, Check, Trash2, 
   Download, Eye, Play, Send, RefreshCw, AlertCircle, EyeOff, CheckCircle2
 } from 'lucide-react';
+import { API_URL } from '../../../lib/supabase';
 
 interface Task {
   id: string;
@@ -78,7 +79,7 @@ export default function AIStudioPage() {
       const headers = { 'Authorization': `Bearer ${token}` };
       
       // Fetch task info
-      const taskRes = await fetch(`http://localhost:5000/api/tasks/${taskId}`, { headers });
+      const taskRes = await fetch(`${API_URL}/api/tasks/${taskId}`, { headers });
       if (taskRes.ok) {
         const taskData = await taskRes.json();
         setTask(taskData);
@@ -87,7 +88,7 @@ export default function AIStudioPage() {
       }
 
       // Fetch generations
-      const gensRes = await fetch(`http://localhost:5000/api/tasks/${taskId}/generations`, { headers });
+      const gensRes = await fetch(`${API_URL}/api/tasks/${taskId}/generations`, { headers });
       if (gensRes.ok) {
         const gensData = await gensRes.json();
         setGenerations(gensData);
@@ -117,7 +118,7 @@ export default function AIStudioPage() {
 
   const handleStartTask = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/start`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}/start`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -134,7 +135,7 @@ export default function AIStudioPage() {
     const prompt = customPrompts[slotType] || '';
     
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/generate`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}/generate`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -174,7 +175,7 @@ export default function AIStudioPage() {
 
     pollIntervals.current[slotType] = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${jobId}/status`, {
+        const res = await fetch(`${API_URL}/api/jobs/${jobId}/status`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -221,7 +222,7 @@ export default function AIStudioPage() {
   const handleDeleteGeneration = async (genId: string) => {
     if (!confirm('Are you sure you want to delete this generated backdrop variation?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/generations/${genId}`, {
+      const res = await fetch(`${API_URL}/api/generations/${genId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -240,7 +241,7 @@ export default function AIStudioPage() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/submit`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}/submit`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });

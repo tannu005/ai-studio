@@ -7,6 +7,7 @@ import {
   Plus, Calendar, User, ShieldAlert, CheckCircle, 
   RefreshCcw, Trash2, ArrowRight, Clipboard, BarChart3, AlertCircle, FileSpreadsheet
 } from 'lucide-react';
+import { API_URL } from '../../lib/supabase';
 
 interface Task {
   id: string;
@@ -71,7 +72,7 @@ export default function AdminDashboard() {
       const headers = { 'Authorization': `Bearer ${token}` };
       
       // Fetch tasks
-      const tasksRes = await fetch('http://localhost:5000/api/tasks', { headers });
+      const tasksRes = await fetch(`${API_URL}/api/tasks`, { headers });
       if (tasksRes.ok) {
         const tasksData = await tasksRes.json();
         setTasks(tasksData);
@@ -79,7 +80,7 @@ export default function AdminDashboard() {
 
       // Fetch users from Supabase REST (bypass with service role in backend, or query via anon if RLS allows)
       // For local simplicity, the Flask API returns all profiles in our database
-      const usersRes = await fetch('http://localhost:5000/api/auth/me', { headers }); // We can also fetch all user list
+      const usersRes = await fetch(`${API_URL}/api/auth/me`, { headers }); // We can also fetch all user list
       // We will fetch users via public REST or a mock listing if offline
       // Let's call standard Supabase client or a mock list
       setUsers([
@@ -88,7 +89,7 @@ export default function AdminDashboard() {
       ]);
 
       // Fetch Audit logs
-      const auditRes = await fetch('http://localhost:5000/api/auth/me', { headers }); // Let's mock logs if db is empty
+      const auditRes = await fetch(`${API_URL}/api/auth/me`, { headers }); // Let's mock logs if db is empty
       setAuditLogs([
         { id: '1', table_name: 'tasks', action: 'CREATE', row_id: 'sample-task-1', performed_by: 'mock-admin-id', created_at: new Date().toISOString() }
       ]);
@@ -125,7 +126,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch(`${API_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -157,7 +158,7 @@ export default function AdminDashboard() {
   const handleDeleteTask = async (taskId: string) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -173,7 +174,7 @@ export default function AdminDashboard() {
     setReviewingTaskId(task.id);
     setRevisionFeedback('');
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${task.id}/generations`, {
+      const res = await fetch(`${API_URL}/api/tasks/${task.id}/generations`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -187,7 +188,7 @@ export default function AdminDashboard() {
 
   const handleAcceptReview = async (taskId: string) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/accept`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}/accept`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -206,7 +207,7 @@ export default function AdminDashboard() {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}/request-revision`, {
+      const res = await fetch(`${API_URL}/api/tasks/${taskId}/request-revision`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

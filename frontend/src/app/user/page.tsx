@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { ClipboardList, Clock, CheckCircle2, ArrowRight, BookOpen, AlertCircle } from 'lucide-react';
+import { API_URL } from '../../lib/supabase';
 import Link from 'next/link';
 
 interface Task {
@@ -31,7 +32,7 @@ export default function UserDashboard() {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/tasks/my-tasks', {
+      const res = await fetch(`${API_URL}/api/tasks/my-tasks`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

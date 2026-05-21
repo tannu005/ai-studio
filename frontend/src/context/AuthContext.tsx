@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../lib/supabase';
+import { supabase, API_URL } from '../lib/supabase';
 
 interface UserProfile {
   id: string;
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       // Sync user profile with Flask backend
       // First, trigger the sync callback
-      await fetch('http://localhost:5000/api/auth/oauth/callback', {
+      await fetch(`${API_URL}/api/auth/oauth/callback`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${sessionToken}`,
@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       // Then, fetch profile
-      const res = await fetch('http://localhost:5000/api/auth/me', {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
         headers: {
           'Authorization': `Bearer ${sessionToken}`
         }
