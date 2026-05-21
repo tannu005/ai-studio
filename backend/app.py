@@ -11,8 +11,14 @@ from routes.generate import generate_bp
 def create_app():
     app = Flask(__name__, static_folder="static", static_url_path="/static")
     
-    # Configure CORS to allow Next.js development client
-    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000"]}})
+    # Configure CORS to allow Next.js client (dev and production Vercel domains)
+    CORS(app, resources={r"/api/*": {
+        "origins": [
+            "http://localhost:3000",
+            "https://ai-studio-pi-khaki.vercel.app",
+            "https://ai-studio-9m89n8xrg-tannus-projects-c139bb6d.vercel.app"
+        ]
+    }})
     
     # App configs
     app.config.from_object(Config)
